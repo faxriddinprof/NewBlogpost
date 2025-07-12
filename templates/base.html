@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Faxriddin Blog {% endblock title %}</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'article_list' %}">
+            <img src="{% static 'img/me.jpg' %}" alt="Logo" width="35" height="35" class="rounded-circle me-2">
+            <strong>Faxriddin Blog</strong>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            {% if user.is_authenticated %}
+            <ul class="navbar-nav align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link nav-btn" href="{% url 'profil_view' request.user.id %}">👤 Profil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-btn" href="{% url 'my_posts' %}">📝 Postlarim</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-btn" href="{% url 'add_article' %}">➕ Yangi post</a>
+                </li>
+                <li class="nav-item">
+                    <span class="text-white fw-bold me-2">Salom, {{ user.username }}!</span>
+                </li>
+                <li class="nav-item">
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button class="btn btn-light btn-sm ms-2" type="submit">🚪 Chiqish</button>
+                    </form>
+                </li>
+            </ul>
+            {% else %}
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link nav-btn" href="{% url 'login' %}">🔐 Kirish / Ro'yxatdan o'tish</a>
+                </li>
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<!-- CONTENT -->
+<div class="container mt-4">
+    {% block content %}{% endblock content %}
+</div>
+
+<!-- FOOTER -->
+<footer class="text-center text-muted mt-5 mb-3">
+    <small>&copy; {{ now.year }} Faxriddin Blog</small>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

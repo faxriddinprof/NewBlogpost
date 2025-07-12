@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/article_list.css' %}">
+<h2>Assalomu alaykum, {{ user.username }}!</h2>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Maqolalar</h2>
+    <div class="row">
+        {% for article in object_list %}
+        <div class="col-md-4 col-sm-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                {% if article.photo %}
+                <img src="{{ article.photo.url }}" class="card-img-top article-img" alt="{{ article.title }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ article.title }}</h5>
+                    <p class="card-text">{{ article.summary|default:"" }}</p>
+                    <a href="{{ article.get_absolute_url }}" class="btn btn-primary">Batafsil</a>
+                </div>
+                <div class="card-footer text-muted small">
+                    Muallif: {{ article.author.username }} | {{ article.date|date:"d M Y, H:i" }}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>Hozircha maqola yo'q.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

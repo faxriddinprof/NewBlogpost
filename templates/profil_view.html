@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/profil_view.css' %}">
+
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <div class="row align-items-center">
+            <div class="col-md-4 text-center">
+                {% if object.profile_picture %}
+                    <img src="{{ object.profile_picture.url }}" class="img-fluid rounded-circle profile-pic" alt="Profil rasmi">
+                {% else %}
+                    <img src="{% static 'img/default-profile.png' %}" class="img-fluid rounded-circle profile-pic" alt="Default profil rasmi">
+                {% endif %}
+            </div>
+            <div class="col-md-8">
+                <h3 class="mb-3">{{ object.username }} profili</h3>
+                <p><strong>Email:</strong> {{ object.email }}</p>
+                <p><strong>Ismi:</strong> {{ object.first_name }}</p>
+                <p><strong>Familiyasi:</strong> {{ object.last_name }}</p>
+                <p><strong>Yoshi:</strong> {{ object.age }}</p>
+                <p><strong>Manzili:</strong> {{ object.location }}</p>
+
+                <a href="{% url 'profil_edit' pk=object.pk %}" class="btn btn-warning mt-3">Profilni tahrirlash</a>
+                <a href="{% url 'my_posts' %}" class="btn btn-info mt-3 ms-2">My Posts</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

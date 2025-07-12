@@ -1,0 +1,25 @@
+.card-img-top {
+    object-fit: cover;
+    max-height: 400px;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+}
+
+.btn-danger {
+    font-weight: 500;
+}
+
+.card-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+}

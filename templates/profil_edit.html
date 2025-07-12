@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Profilni tahrirlash{% endblock title %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/profil_edit.css' %}">
+
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <h3 class="mb-4">Shaxsiy ma'lumotlarni tahrirlash</h3>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-4 text-center mb-3">
+                    {% if user.profile_picture %}
+                        <img src="{{ user.profile_picture.url }}" class="img-fluid rounded-circle profile-preview" alt="Rasm">
+                    {% else %}
+                        <img src="{% static 'img/default-profile.png' %}" class="img-fluid rounded-circle profile-preview" alt="Default rasm">
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-success mt-3">Saqlash</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

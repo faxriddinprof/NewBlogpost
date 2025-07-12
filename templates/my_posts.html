@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/my_posts.css' %}">
+
+<div class="container mt-5">
+    <h2 class="mb-4">Mening Postlarim</h2>
+    {% if posts %}
+        <div class="row">
+            {% for post in posts %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                    {% if post.photo %}
+                    <img src="{{ post.photo.url }}" class="card-img-top article-img" alt="{{ post.title }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p class="card-text">{{ post.summary|default:"" }}</p>
+                        <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Batafsil</a>
+                    </div>
+                    <div class="card-footer text-muted small">
+                        {{ post.date|date:"d M Y, H:i" }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Siz hali post yozmagansiz.</p>
+    {% endif %}
+</div>
+{% endblock %}

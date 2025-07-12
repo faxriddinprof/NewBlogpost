@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/article_detail.css' %}">
+
+<div class="container mt-5">
+    <div class="card shadow">
+        {% if object.photo %}
+        <img src="{{ object.photo.url }}" class="card-img-top" alt="{{ object.title }}">
+        {% endif %}
+        <div class="card-body">
+            <h2 class="card-title">{{ object.title }}</h2>
+            <p class="card-text text-muted">Yozilgan sana: {{ object.date|date:"d M Y, H:i" }}</p>
+            <p class="card-text">{{ object.body|linebreaks }}</p>
+            <p class="text-end"><strong>Muallif:</strong> {{ object.author.username }}</p>
+            
+            <div class="action-buttons d-flex gap-2 mt-3">
+                <a href="{% if request.user == object.author %}{% url 'my_posts' %}{% else %}{% url 'article_list' %}{% endif %}" 
+                   class="btn btn-outline-secondary">
+                    ← Orqaga
+                </a>
+
+                {% if request.user == object.author %}
+                <a href="{% url 'article_delete' object.pk %}" class="btn btn-danger">
+                    🗑 O‘chirish
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

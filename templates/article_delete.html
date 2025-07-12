@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="alert alert-danger shadow-sm p-4 rounded">
+        <h4>Diqqat! Ushbu postni o‘chirmoqchimisiz?</h4>
+        <p><strong>{{ object.title }}</strong></p>
+
+        <form method="post">
+            {% csrf_token %}
+            <a href="{% url 'article_detail' object.pk %}" class="btn btn-secondary">Bekor qilish</a>
+            <button type="submit" class="btn btn-danger">Ha, o‘chirish</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
