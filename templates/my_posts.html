@@ -16,7 +16,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ post.title }}</h5>
                         <p class="card-text">{{ post.summary|default:"" }}</p>
-                        <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Batafsil</a>
+                        <a href="{{ post.get_absolute_url }}?next=my_posts" class="btn btn-primary">Batafsil</a>
                     </div>
                     <div class="card-footer text-muted small">
                         {{ post.date|date:"d M Y, H:i" }}

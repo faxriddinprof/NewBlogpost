@@ -14,20 +14,162 @@
             <p class="card-text text-muted">Yozilgan sana: {{ object.date|date:"d M Y, H:i" }}</p>
             <p class="card-text">{{ object.body|linebreaks }}</p>
             <p class="text-end"><strong>Muallif:</strong> {{ object.author.username }}</p>
-            
-            <div class="action-buttons d-flex gap-2 mt-3">
-                <a href="{% if request.user == object.author %}{% url 'my_posts' %}{% else %}{% url 'article_list' %}{% endif %}" 
-                   class="btn btn-outline-secondary">
-                    ← Orqaga
-                </a>
 
+            <!-- Like / Dislike + Comment form -->
+            <div class="interaction-box d-flex flex-wrap gap-3 mt-4">
+
+                <!-- Like -->
+                <form id="like-form" method="post" action="{% url 'like_article' object.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-success {% if user_liked %}active{% endif %}">
+                        👍 Layk
+                    </button>
+                </form>
+
+                <!-- Dislike -->
+                <form id="dislike-form" method="post" action="{% url 'dislike_article' object.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger {% if user_disliked %}active{% endif %}">
+                        👎 Dizlayk
+                    </button>
+                </form>
+
+                <!-- Ko'rsatkichlar -->
+                <div class="d-flex align-items-center gap-3">
+                    <span id="like-count" class="badge bg-success">👍 {{ like_count }}</span>
+                    <span id="dislike-count" class="badge bg-danger">👎 {{ dislike_count }}</span>
+                </div>
+
+
+                <!-- Comment form -->
+                {% if user.is_authenticated %}
+                <form method="post" class="flex-grow-1">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">✍ Kommentariya yozish</button>
+                </form>
+                {% else %}
+                <p class="text-muted">Kommentariya yozish uchun tizimga kiring.</p>
+                {% endif %}
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons d-flex gap-2 mt-4">
+                <a href="{% url next %}" class="btn btn-outline-secondary">← Orqaga</a>
                 {% if request.user == object.author %}
-                <a href="{% url 'article_delete' object.pk %}" class="btn btn-danger">
-                    🗑 O‘chirish
-                </a>
+                <a href="{% url 'article_delete' object.pk %}" class="btn btn-danger">🗑 O‘chirish</a>
+                <a href="{% url 'article_update' object.pk %}" class="btn btn-primary">✏ Tahrirlash</a>
                 {% endif %}
             </div>
         </div>
     </div>
+
+    <!-- Kommentariyalar -->
+    <div class="comments-section mt-5">
+        <h4>💬 Kommentariyalar ({{ total_comments }})</h4>
+
+        {% if comments %}
+        <ul class="list-group mb-3" id="comment-list">
+            {% for comment in comments %}
+            <li class="list-group-item">
+                <div class="comment-author">{{ comment.author.username }}</div>
+                <small class="text-muted">{{ comment.created_at|date:"d M Y, H:i" }}</small>
+                <p class="mb-1">{{ comment.content }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+
+        {% if total_comments > 5 %}
+        <div class="text-center">
+            <button id="load-more" class="btn btn-outline-info" data-page="2">Ko‘proq ko‘rsatish</button>
+        </div>
+        {% endif %}
+
+        {% else %}
+        <p class="text-muted">Hozircha hech qanday kommentariya yo‘q.</p>
+        {% endif %}
+    </div>
 </div>
+
+
+
+<!-- --------------------Js like dislike----------- -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    function handleVote(formId, isLike = true) {
+        const form = document.getElementById(formId);
+        form?.addEventListener('submit', function (e) {
+            e.preventDefault();
+            fetch(this.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('like-count').innerText = data.likes;
+                document.getElementById('dislike-count').innerText = data.dislikes;
+
+                // Klasslarni faollashtirish yoki olib tashlash
+                const likeBtn = document.querySelector('#like-form button');
+                const dislikeBtn = document.querySelector('#dislike-form button');
+
+                if (likeBtn && dislikeBtn) {
+                    likeBtn.classList.toggle('active', data.user_liked);
+                    dislikeBtn.classList.toggle('active', data.user_disliked);
+                }
+            });
+        });
+    }
+
+    handleVote('like-form', true);
+    handleVote('dislike-form', false);
+});
+</script>
+
+
+
+<!-- show more js -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const loadMoreBtn = document.getElementById('load-more');
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', function () {
+            const page = this.dataset.page;
+            fetch("{% url 'load_more_comments' object.pk %}?page=" + page)
+                .then(res => res.json())
+                .then(data => {
+                    const list = document.getElementById('comment-list');
+                    data.comments.forEach(comment => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item';
+                        li.innerHTML = `<div class="comment-author">${comment.author}</div>
+                                        <small class="text-muted">${comment.created_at}</small>
+                                        <p class="mb-1">${comment.content}</p>`;
+                        list.appendChild(li);
+                    });
+
+                    if (data.has_next) {
+                        loadMoreBtn.dataset.page = parseInt(page) + 1;
+                    } else {
+                        loadMoreBtn.remove();
+                    }
+                });
+        });
+    }
+});
+</script>
+
+
+
+
+
+
 {% endblock %}
+
+
+
+
+
