@@ -16,18 +16,26 @@
 </head>
 <body>
 
-<!-- NAVBAR -->
+<!-- ==================== NAVBAR ==================== -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
     <div class="container-fluid">
         <a class="navbar-brand d-flex align-items-center" href="{% url 'article_list' %}">
             <img src="{% static 'img/me.jpg' %}" alt="Logo" width="35" height="35" class="rounded-circle me-2">
             <strong>Faxriddin Blog</strong>
         </a>
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+
+            <!-- Qidiruv formasi NAVBAR ichida -->
+            <form method="get" action="{% url 'article_list' %}" class="d-flex align-items-center me-3 position-relative" id="navbar-search-form">
+                <input type="text" name="q" id="search-input" class="form-control form-control-sm" placeholder="🔍 Qidirish..." value="{{ request.GET.q }}">
+                <span id="clear-search">&times;</span>
+            </form>
+
             {% if user.is_authenticated %}
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item">
@@ -43,9 +51,8 @@
                 <li class="nav-item">
                     <form method="post" action="{% url 'logout' %}">
                         {% csrf_token %}
-                        <button class="nav-link nav-btn logout-red" type="submit">🚪 Chiqish</button>
+                        <button class="logout-red" type="submit">🚪 Chiqish</button>
                     </form>
-
                 </li>
             </ul>
             {% else %}
@@ -73,7 +80,7 @@
 
 <!-- CONTENT -->
 <div class="container mt-4">
-    {% block content %}{% endblock content %}
+    {% block content %}{% endblock %}
 </div>
 
 <!-- FOOTER -->
@@ -84,7 +91,7 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Flash dismiss -->
+<!-- Alert avto-yopilishi -->
 <script>
     setTimeout(function () {
         let alerts = document.querySelectorAll('.alert');
@@ -95,6 +102,9 @@
         });
     }, 3000);
 </script>
+
+<!-- Qidiruv AJAX – JS fayl orqali -->
+<script src="{% static 'js/search.js' %}"></script>
 
 </body>
 </html>

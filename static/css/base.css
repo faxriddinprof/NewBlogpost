@@ -1,11 +1,13 @@
-/* Umumiy font va ranglar */
+/* === Umumiy font va ranglar === */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f5f5f5;
     color: #212529;
+    margin: 0;
+    padding: 0;
 }
 
-/* Navbar ichidagi tugmalar */
+/* === Navbar tugmalari === */
 .nav-btn {
     background-color: rgba(255, 255, 255, 0.15);
     border-radius: 6px;
@@ -15,6 +17,8 @@ body {
     font-weight: 600;
     transition: all 0.3s ease-in-out;
     border: none;
+    text-decoration: none;
+    display: inline-block;
 }
 
 .nav-btn:hover {
@@ -23,56 +27,83 @@ body {
     text-decoration: none;
 }
 
-/* 🔴 Chiqish tugmasi uchun maxsus klass */
+/* === Chiqish tugmasi uchun alohida dizayn === */
 .logout-red {
-    background-color: #dc3545 !important; /* Qizil */
+    background-color: #dc3545 !important;
     color: #fff !important;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-weight: 600;
+    border: none;
+    display: inline-block;
+    transition: all 0.3s ease-in-out;
 }
 
 .logout-red:hover {
-    background-color: #e74c3c !important; /* Yorqinroq qizil */
+    background-color: #e74c3c !important;
     color: #fff !important;
 }
 
-/* Navbar logosi */
+/* === Navbar ichidagi chiqish formasi stylingi === */
+.navbar .nav-item form {
+    display: inline;
+    background: transparent !important;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* === Navbar brand rasmi === */
 .navbar-brand img {
     border: 2px solid #ffffff;
 }
 
-/* Forma stili */
+/* === Qidiruv formasi NAVBAR ichida === */
+#navbar-search-form {
+    width: 250px;
+    position: relative;
+}
+
+#navbar-search-form .form-control {
+    padding-right: 25px;
+    font-size: 14px;
+    height: 30px;
+    border-radius: 6px;
+}
+
+/* × tugma (tozalash) */
+#clear-search {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #ccc;
+    font-size: 18px;
+    display: none;
+    background: transparent;
+    border: none;
+    line-height: 1;
+    padding: 0;
+}
+
+#clear-search:hover {
+    color: red;
+}
+
+/* === Umumiy formalar uchun styling === */
 form {
     background-color: #ffffff;
     padding: 25px;
     border-radius: 12px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
 }
 
-/* Footer */
+/* === Footer === */
 footer {
     border-top: 1px solid #ccc;
     color: #888;
     padding-top: 10px;
-}
-
-/* Navbar qidiruv formasi (agar kerak bo‘lsa yana qo‘shiladi) */
-.search-form {
-    width: 300px;
-}
-
-.search-form input[type="text"] {
-    border-radius: 20px;
-    padding: 6px 12px;
     font-size: 14px;
-}
-
-.search-form button {
-    border-radius: 20px;
-    padding: 6px 12px;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-.search-form button:hover {
-    background-color: #ffffff;
-    color: #0d6efd;
 }

@@ -1,23 +1,25 @@
 {% if object_list %}
 <div class="row">
     {% for article in object_list %}
-    <div class="col-md-4 col-sm-6 mb-4">
-        <div class="card h-100 shadow-sm">
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm h-100">
             {% if article.photo %}
             <img src="{{ article.photo.url }}" class="card-img-top article-img" alt="{{ article.title }}">
             {% endif %}
             <div class="card-body">
                 <h5 class="card-title">{{ article.title }}</h5>
-                <p class="card-text">{{ article.summary|default:"" }}</p>
-                <a href="{{ article.get_absolute_url }}" class="btn btn-primary">Batafsil</a>
-            </div>
-            <div class="card-footer text-muted small">
-                Muallif: {{ article.author.username }} | {{ article.date|date:"d M Y, H:i" }}
+                <p class="card-text">{{ article.summary|truncatechars:100 }}</p>
+                <div class="text-muted small mb-2">
+                    ✍ {{ article.author.username }} — 📅 {{ article.date|date:"d M, Y" }}
+                </div>
+                <a href="{% url 'article_detail' article.pk %}" class="btn btn-outline-primary btn-sm">Batafsil</a>
             </div>
         </div>
     </div>
     {% endfor %}
 </div>
 {% else %}
-<p class="text-danger">❌ Hech qanday maqola topilmadi.</p>
+<div class="text-center mt-4">
+    <p class="text-danger fw-bold fs-5">🔍 Hech qanday maqola topilmadi.</p>
+</div>
 {% endif %}

@@ -1,64 +1,91 @@
+.card {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    background: #fff;
+}
+
+.card-img-top {
+    max-height: 400px;
+    object-fit: cover;
+    border-bottom: 1px solid #dee2e6;
+}
+
 .card-title {
     font-size: 2rem;
-    font-weight: bold;
+    font-weight: 600;
     color: #333;
+    margin-bottom: 0.75rem;
 }
 
 .card-text {
-    font-size: 1.1rem;
-    line-height: 1.6;
+    font-size: 1.05rem;
+    line-height: 1.7;
     color: #444;
 }
 
-.comment-author {
-    font-weight: bold;
-    color: #2c3e50;
-}
-
-.reaction-counts span {
-    font-size: 1rem;
-    padding: 0.4rem 0.8rem;
-    border-radius: 20px;
-    font-weight: 600;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-#like-form .active,
-#dislike-form .active {
-    background-color: #28a745;
-    color: #fff;
-    border-color: #28a745;
-}
-
-#dislike-form .active {
-    background-color: #dc3545;
-    border-color: #dc3545;
+.text-muted {
+    font-size: 0.9rem;
 }
 
 .interaction-box {
-    border-top: 1px solid #ddd;
-    padding-top: 1rem;
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-top: 1.5rem;
+}
+
+.interaction-box button.active {
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.reaction-counts .badge {
+    font-size: 1rem;
+    padding: 0.5em 1em;
 }
 
 .comments-section {
-    border-top: 2px solid #007bff;
-    padding-top: 2rem;
+    background-color: #f1f3f5;
+    border-radius: 12px;
+    padding: 1.5rem;
 }
 
-.btn-primary, .btn-danger, .btn-outline-success, .btn-outline-danger {
+.comments-section h4 {
+    font-size: 1.4rem;
     font-weight: 600;
-    transition: all 0.3s ease;
+    color: #222;
 }
 
-.btn-primary:hover {
-    background-color: #0056b3;
+#comment-list .list-group-item {
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    margin-bottom: 0.7rem;
 }
 
-.btn-outline-success:hover,
-.btn-outline-danger:hover {
-    transform: scale(1.05);
+.comment-author {
+    font-weight: 600;
+    color: #2c3e50;
 }
 
 #load-more {
     margin-top: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+#load-more:hover {
+    background-color: #0dcaf0;
+    color: #fff;
+}
+
+.action-buttons .btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.action-buttons .btn:hover {
+    opacity: 0.9;
 }

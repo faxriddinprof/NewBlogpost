@@ -1,52 +1,57 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/article_list.css' %}">
 
 <div class="container mt-4">
-
-    <!-- 🔍 AJAX Qidiruv input -->
-    <div class="input-group mb-4">
-        <input type="text"
-               id="liveSearchInput"
-               class="form-control"
-               placeholder="🔍 Maqola, muallif, kategoriya…">
-        <span class="input-group-text bg-primary text-white">Qidirish</span>
+    <div class="row" id="article-container">
+        {% for article in object_list %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                {% if article.photo %}
+                <img src="{{ article.photo.url }}" class="card-img-top article-img" alt="{{ article.title }}">
+                {% endif %}
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title">{{ article.title }}</h5>
+                        <p class="card-text">{{ article.summary|truncatewords:20 }}</p>
+                    </div>
+                    <div class="mt-3">
+                        <p class="author-date text-muted mb-1">🖋 {{ article.author.username }}</p>
+                        <p class="author-date text-muted">📅 {{ article.date|date:"d M Y, H:i" }}</p>
+                        <a href="{% url 'article_detail' article.pk %}" class="btn btn-outline-primary w-100 mt-2">Batafsil</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 
-    <!-- 🔎 Natijalar shu yerga chiqadi -->
-    <div id="search-results">
-        {% include 'partials/search_results.html' %}
-    </div>
+    {% if is_paginated %}
+    <nav class="mt-4 d-flex justify-content-center">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            </li>
+            {% endif %}
 
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                {% elif num > page_obj.number|add:-2 and num < page_obj.number|add:2 %}
+                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
 </div>
-
-<!-- ================= JS (AJAX Live Search) ================= -->
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const input     = document.getElementById('liveSearchInput');
-    const container = document.getElementById('search-results');
-    const ajaxUrl   = "{% url 'ajax_search' %}";   // Django reverseda xavfsiz
-
-    // Kichik debounce ‑ so‘rovlarni haddan tashqari yubormaslik uchun
-    let timer = null;
-
-    input.addEventListener('keyup', () => {
-        clearTimeout(timer);
-        timer = setTimeout(() => liveSearch(input.value.trim()), 300);
-    });
-
-    function liveSearch(query) {
-        // Bo‘sh qidiruvda sahifani qayta yuklamaymiz – default ro‘yxat qoldiriladi
-        if (query === "") return;
-
-        fetch(`${ajaxUrl}?q=${encodeURIComponent(query)}`, {
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        })
-        .then(res => res.text())
-        .then(html => { container.innerHTML = html; })
-        .catch(err => { console.error('Live search xatosi:', err); });
-    }
-});
-</script>
 {% endblock %}

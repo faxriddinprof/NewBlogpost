@@ -10,7 +10,25 @@ from django.core.paginator import Paginator
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.db.models import Q
+from django.template.loader import render_to_string
 
+# class ArticleView(ListView):
+#     model = Article
+#     template_name = 'article_list.html'
+#     context_object_name = 'object_list'
+#     paginate_by = 10
+
+#     def get_queryset(self):
+#         queryset = super().get_queryset()
+#         query = self.request.GET.get('q')
+#         if query:
+#             queryset = queryset.filter(
+#                 Q(title__icontains=query) |
+#                 Q(summary__icontains=query) |
+#                 Q(body__icontains=query) |
+#                 Q(author__username__icontains=query)
+#             ).distinct()
+#         return queryset
 
 class ArticleView(ListView):
     model = Article
@@ -30,16 +48,32 @@ class ArticleView(ListView):
             ).distinct()
         return queryset
 
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            html = render_to_string('partials/search_results.html', context, request=self.request)
+            return JsonResponse({'html': html})
+        return super().render_to_response(context, **response_kwargs)
 
-def ajax_search(request):
-    q = request.GET.get('q', '')
-    articles = Article.objects.filter(
-        Q(title__icontains=q) |
-        Q(summary__icontains=q) |
-        Q(author__username__icontains=q)
-    ).order_by('-date')
 
-    return render(request, 'partials/search_results.html', {'object_list': articles})
+# def ajax_search(request):
+#     query = request.GET.get('q', '').strip()
+
+#     if query:
+#         articles = Article.objects.filter(
+#             Q(title__icontains=query) |
+#             Q(summary__icontains=query) |
+#             Q(body__icontains=query) |
+#             Q(author__username__icontains=query)
+#         ).order_by('-date')
+#     else:
+#         articles = Article.objects.all().order_by('-date')[:10]
+
+#     html = render_to_string(
+#         'partials/search_results.html',
+#         {'object_list': articles},
+#         request=request  # BU MUHIM! context_processor ishlashi uchun
+#     )
+#     return JsonResponse({'html': html})
 
 
 class ArticleDetailView(DetailView):
