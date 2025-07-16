@@ -11,6 +11,8 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+    {% block extrahead %}{{ block.super }}{% endblock %}
 </head>
 <body>
 
@@ -37,18 +39,17 @@
                 <li class="nav-item">
                     <a class="nav-link nav-btn" href="{% url 'add_article' %}">➕ Yangi post</a>
                 </li>
-                <li class="nav-item">
-                    <span class="text-white fw-bold me-2">Salom, {{ user.username }}!</span>
-                </li>
+                <li class="nav-item text-white fw-bold mx-2">Salom, {{ user.username }}!</li>
                 <li class="nav-item">
                     <form method="post" action="{% url 'logout' %}">
                         {% csrf_token %}
-                        <button class="btn btn-light btn-sm ms-2" type="submit">🚪 Chiqish</button>
+                        <button class="nav-link nav-btn logout-red" type="submit">🚪 Chiqish</button>
                     </form>
+
                 </li>
             </ul>
             {% else %}
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link nav-btn" href="{% url 'login' %}">🔐 Kirish / Ro'yxatdan o'tish</a>
                 </li>
@@ -57,6 +58,18 @@
         </div>
     </div>
 </nav>
+
+<!-- Flash messages -->
+{% if messages %}
+<div class="container mt-3">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Yopish"></button>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
 
 <!-- CONTENT -->
 <div class="container mt-4">
@@ -70,5 +83,18 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Flash dismiss -->
+<script>
+    setTimeout(function () {
+        let alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            alert.classList.remove('show');
+            alert.classList.add('fade');
+            alert.style.display = 'none';
+        });
+    }, 3000);
+</script>
+
 </body>
 </html>

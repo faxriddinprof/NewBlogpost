@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.conf import settings
-
+from ckeditor.fields import RichTextField
 
 # Create your models here.
 
@@ -10,7 +10,7 @@ from django.conf import settings
 class Article(models.Model):
     title=models.CharField(max_length=150)
     summary=models.CharField(max_length=250, blank=True)
-    body=models.TextField()
+    body=RichTextField()
     photo=models.ImageField(upload_to='images/',blank=True)
     date=models.DateTimeField(auto_now_add=True)
     author=models.ForeignKey(

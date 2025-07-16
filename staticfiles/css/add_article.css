@@ -1,0 +1,53 @@
+body {
+    background-color: #f4f4f4;
+}
+
+/* Karta (form) ko‘rinishi */
+.card {
+    border-radius: 12px;
+    background-color: #fff;
+    border: none;
+    max-width: 100%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* CKEditor maydonini keng qilish */
+.ck-editor__editable {
+    min-height: 400px;
+    max-width: 100% !important;
+    font-size: 1rem;
+}
+
+/* CKEditor konteynerining to‘liq kengayishi */
+.ck-editor__main,
+.ck-editor__editable_inline {
+    width: 100% !important;
+}
+
+/* Inputlar va textarea */
+form .form-control {
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    transition: border-color 0.3s ease-in-out;
+}
+
+form .form-control:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+}
+
+/* Saqlash tugmasi */
+.btn-success {
+    font-weight: 600;
+    padding: 12px;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-success:hover {
+    background-color: #157347;
+    transform: scale(1.01);
+}

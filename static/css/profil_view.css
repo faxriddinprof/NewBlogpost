@@ -1,21 +1,44 @@
-.profile-pic {
-    width: 200px;
-    height: 200px;
+.profile-img {
+    width: 150px;
+    height: 150px;
     object-fit: cover;
-    border-radius: 50%;
-    border: 4px solid #0d6efd;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border: 4px solid #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.card h3 {
+.profile-card {
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.list-group-item {
+    font-size: 1rem;
+    padding: 0.75rem 1.25rem;
+    border: none;
+    border-bottom: 1px solid #eee;
+    background-color: transparent;
+}
+
+.btn-orange {
+    background-color: #fd7e14;
+    color: white;
     font-weight: bold;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
 }
 
-.card p {
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
+.btn-orange:hover {
+    background-color: #e66900;
+    color: white;
 }
 
-.btn {
-    min-width: 150px;
+.btn-secondary {
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+.text-primary {
+    font-weight: 600;
 }

@@ -1,29 +1,46 @@
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
-from .models import Article, Comment
-# from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import DeleteView
+from django.shortcuts import render, redirect
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from .models import Article, Comment, LikeDislike
+from .forms import CommentForm, ArticleForm
 from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .forms import CommentForm
-from django.shortcuts import redirect
-#-----------------------------------
-from .models import LikeDislike
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_POST
-
-# from django.co
-# Create your views here.
+from django.contrib import messages
+from django.db.models import Q
 
 
 class ArticleView(ListView):
-    model= Article
-    template_name='article_list.html'
-    # context_object_name = 'articles'
-    # login_url = 'login'
+    model = Article
+    template_name = 'article_list.html'
+    context_object_name = 'object_list'
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get('q')
+        if query:
+            queryset = queryset.filter(
+                Q(title__icontains=query) |
+                Q(summary__icontains=query) |
+                Q(body__icontains=query) |
+                Q(author__username__icontains=query)
+            ).distinct()
+        return queryset
+
+
+def ajax_search(request):
+    q = request.GET.get('q', '')
+    articles = Article.objects.filter(
+        Q(title__icontains=q) |
+        Q(summary__icontains=q) |
+        Q(author__username__icontains=q)
+    ).order_by('-date')
+
+    return render(request, 'partials/search_results.html', {'object_list': articles})
+
 
 class ArticleDetailView(DetailView):
     model = Article
@@ -34,30 +51,21 @@ class ArticleDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['next'] = self.request.GET.get('next', 'article_list')
         context['form'] = CommentForm()
+
         post = self.get_object()
         context['comments'] = Comment.objects.filter(post=post).order_by('-created_at')[:5]
         context['total_comments'] = Comment.objects.filter(post=post).count()
 
-        # Like / Dislike
         context['like_count'] = post.likes.filter(value=True).count()
         context['dislike_count'] = post.likes.filter(value=False).count()
+
         if self.request.user.is_authenticated:
             context['user_liked'] = post.likes.filter(user=self.request.user, value=True).exists()
             context['user_disliked'] = post.likes.filter(user=self.request.user, value=False).exists()
         else:
-            context['user_liked'] = context['user_disliked'] = False
+            context['user_liked'] = False
+            context['user_disliked'] = False
 
-        return context
-
-    model = Article
-    template_name = 'article_detail.html'
-    context_object_name = 'object'
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['next'] = self.request.GET.get('next', 'article_list')
-        context['form'] = CommentForm()
-        context['comments'] = Comment.objects.filter(post=self.object).order_by('-created_at')[:5]
-        context['total_comments'] = Comment.objects.filter(post=self.object).count()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -68,54 +76,64 @@ class ArticleDetailView(DetailView):
             comment.author = request.user
             comment.post = self.object
             comment.save()
+            messages.success(request, "💬 Fikr muvaffaqiyatli qo‘shildi.")
             return redirect('article_detail', pk=self.object.pk)
         context = self.get_context_data(form=form)
         return self.render_to_response(context)
 
 
-class CreateArticle(LoginRequiredMixin,CreateView):
-    model= Article
-    fields=['title','summary', 'body', 'photo']
-    template_name='add_article.html'
+class CreateArticle(LoginRequiredMixin, CreateView):
+    model = Article
+    form_class = ArticleForm
+    template_name = 'add_article.html'
 
     def form_valid(self, form):
         self.object = form.save(False)
         self.object.author = self.request.user
         self.object.save()
+        messages.success(self.request, "✅ Maqola muvaffaqiyatli yaratildi.")
         return HttpResponseRedirect(self.get_success_url())
-    
-    # def form_valid(self, form):
-    #     form.instance.author=self.request.user
-    #     return super().form_valid(form)
 
-class ArticleUpdateview(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
-    model=Article
-    fields=['title','summary', 'body', 'photo']
-    template_name='article_update.html'
+
+class ArticleUpdateview(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Article
+    fields = ['title', 'summary', 'body', 'photo']
+    template_name = 'article_update.html'
 
     def test_func(self):
-        obj=self.get_object()
-        return obj.author==self.request.user
+        obj = self.get_object()
+        return obj.author == self.request.user
 
-class ArticleDeleteview(LoginRequiredMixin,UserPassesTestMixin, DeleteView):
+    def form_valid(self, form):
+        messages.success(self.request, "✏️ Maqola yangilandi.")
+        return super().form_valid(form)
+
+
+class ArticleDeleteview(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Article
-    template_name='article_delete.html'
+    template_name = 'article_delete.html'
     success_url = reverse_lazy('article_list')
 
     def test_func(self):
-        obj=self.get_object()
-        return obj.author==self.request.user
+        obj = self.get_object()
+        return obj.author == self.request.user
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, "🗑️ Maqola o‘chirildi.")
+        return super().delete(request, *args, **kwargs)
 
 
 class Myposts(ListView):
-    model=Article
-    template_name='my_posts.html'
-    context_object_name ='posts'
+    model = Article
+    template_name = 'my_posts.html'
+    context_object_name = 'posts'
 
     def get_queryset(self):
         return Article.objects.filter(author=self.request.user)
-    
-#-----------------------like dislike-----------------------------------------------
+
+
+# ----------------------- Like / Dislike -----------------------------------
+
 def _like_dislike_response_data(article, user):
     return {
         'likes': article.likes.filter(value=True).count(),
@@ -157,7 +175,7 @@ def dislike_article(request, pk):
     return JsonResponse(_like_dislike_response_data(article, request.user))
 
 
-#---------------------------------------------------
+# ---------------------- Load more comments --------------------------------
 
 def load_more_comments(request, pk):
     page = request.GET.get('page', 2)

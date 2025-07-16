@@ -1,140 +1,64 @@
-/* Umumiy konteyner */
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-/* Post rasmi */
-.card-img-top {
-    max-height: 400px;
-    object-fit: cover;
-    border-radius: 0.5rem 0.5rem 0 0;
-}
-
-/* Post matni */
-.card-body {
-    padding: 2rem;
-    background-color: #fdfdfd;
-}
-
 .card-title {
     font-size: 2rem;
-    font-weight: 600;
+    font-weight: bold;
     color: #333;
-    margin-bottom: 1rem;
 }
 
 .card-text {
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     line-height: 1.6;
+    color: #444;
 }
 
-/* Muallif va sana */
-.text-muted {
-    font-size: 0.9rem;
-    color: #6c757d !important;
-}
-
-.text-end strong {
-    color: #555;
-}
-
-/* Interaktiv tugmalar (like/dislike/comment) */
-.interaction-box {
-    margin-top: 1.5rem;
-}
-
-.interaction-box form {
-    margin-bottom: 0.5rem;
-}
-
-button.btn {
-    min-width: 120px;
-    font-weight: 500;
-}
-
-/* Aktiv tugma ko'rinishi */
-button.active {
-    color: #fff !important;
+.comment-author {
     font-weight: bold;
-    box-shadow: 0 0 6px rgba(0,0,0,0.2);
+    color: #2c3e50;
 }
 
-.btn-outline-success.active {
-    background-color: #198754;
-    border-color: #198754;
+.reaction-counts span {
+    font-size: 1rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.btn-outline-danger.active {
+#like-form .active,
+#dislike-form .active {
+    background-color: #28a745;
+    color: #fff;
+    border-color: #28a745;
+}
+
+#dislike-form .active {
     background-color: #dc3545;
     border-color: #dc3545;
 }
 
-/* Like / Dislike sonlari */
-#like-count, #dislike-count {
-    font-size: 1rem;
-    padding: 0.35rem 0.75rem;
-    border-radius: 0.5rem;
+.interaction-box {
+    border-top: 1px solid #ddd;
+    padding-top: 1rem;
 }
 
-/* Kommentariya formasi */
-form.flex-grow-1 {
-    margin-top: 1rem;
-}
-
-form.flex-grow-1 textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
-/* Kommentariya bloklari */
 .comments-section {
-    background-color: #fafafa;
-    padding: 2rem;
-    border-radius: 0.75rem;
-    box-shadow: 0 0 8px rgba(0,0,0,0.05);
+    border-top: 2px solid #007bff;
+    padding-top: 2rem;
 }
 
-.comment-author {
+.btn-primary, .btn-danger, .btn-outline-success, .btn-outline-danger {
     font-weight: 600;
-    font-size: 1rem;
-    margin-bottom: 0.25rem;
+    transition: all 0.3s ease;
 }
 
-#comment-list .list-group-item {
-    background-color: #fff;
-    border: 1px solid #eee;
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
-    padding: 1rem;
+.btn-primary:hover {
+    background-color: #0056b3;
 }
 
-/* Ko‘proq yuklash tugmasi */
+.btn-outline-success:hover,
+.btn-outline-danger:hover {
+    transform: scale(1.05);
+}
+
 #load-more {
     margin-top: 1rem;
 }
-
-/* Harakat tugmalari (tahrirlash, o‘chirish) */
-.action-buttons {
-    margin-top: 1.5rem;
-}
-
-/* Mobil responsivlik */
-@media (max-width: 576px) {
-    .card-body {
-        padding: 1rem;
-    }
-
-    button.btn {
-        width: 100%;
-    }
-
-    .interaction-box {
-        flex-direction: column;
-    }
-
-    .action-buttons {
-        flex-direction: column;
-    }
-}
-    

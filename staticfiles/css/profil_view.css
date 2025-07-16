@@ -1,0 +1,27 @@
+.profile-card {
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.profile-img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border: 5px solid #dee2e6;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom orange button */
+.btn-orange {
+    background-color: #ff8c00;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+}
+
+.btn-orange:hover {
+    background-color: #e67300;
+    color: #fff;
+}

@@ -1,0 +1,34 @@
+/* Update sahifasi uchun maxsus stil */
+
+.card.shadow {
+    border: none;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+/* Forma maydonlari */
+form input[type="text"],
+form input[type="file"],
+form textarea,
+form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+/* Submit tugmasi */
+button[type="submit"] {
+    padding: 8px 18px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+}
+
+/* Orqaga tugmasi */
+.btn-outline-secondary {
+    border-radius: 6px;
+}

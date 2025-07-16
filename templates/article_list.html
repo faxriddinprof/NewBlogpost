@@ -2,30 +2,51 @@
 {% load static %}
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/article_list.css' %}">
-<h2>Assalomu alaykum, {{ user.username }}!</h2>
 
-<div class="container mt-5">
-    <h2 class="mb-4">Maqolalar</h2>
-    <div class="row">
-        {% for article in object_list %}
-        <div class="col-md-4 col-sm-6 mb-4">
-            <div class="card h-100 shadow-sm">
-                {% if article.photo %}
-                <img src="{{ article.photo.url }}" class="card-img-top article-img" alt="{{ article.title }}">
-                {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ article.title }}</h5>
-                    <p class="card-text">{{ article.summary|default:"" }}</p>
-                    <a href="{{ article.get_absolute_url }}" class="btn btn-primary">Batafsil</a>
-                </div>
-                <div class="card-footer text-muted small">
-                    Muallif: {{ article.author.username }} | {{ article.date|date:"d M Y, H:i" }}
-                </div>
-            </div>
-        </div>
-        {% empty %}
-        <p>Hozircha maqola yo'q.</p>
-        {% endfor %}
+<div class="container mt-4">
+
+    <!-- 🔍 AJAX Qidiruv input -->
+    <div class="input-group mb-4">
+        <input type="text"
+               id="liveSearchInput"
+               class="form-control"
+               placeholder="🔍 Maqola, muallif, kategoriya…">
+        <span class="input-group-text bg-primary text-white">Qidirish</span>
     </div>
+
+    <!-- 🔎 Natijalar shu yerga chiqadi -->
+    <div id="search-results">
+        {% include 'partials/search_results.html' %}
+    </div>
+
 </div>
+
+<!-- ================= JS (AJAX Live Search) ================= -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const input     = document.getElementById('liveSearchInput');
+    const container = document.getElementById('search-results');
+    const ajaxUrl   = "{% url 'ajax_search' %}";   // Django reverseda xavfsiz
+
+    // Kichik debounce ‑ so‘rovlarni haddan tashqari yubormaslik uchun
+    let timer = null;
+
+    input.addEventListener('keyup', () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => liveSearch(input.value.trim()), 300);
+    });
+
+    function liveSearch(query) {
+        // Bo‘sh qidiruvda sahifani qayta yuklamaymiz – default ro‘yxat qoldiriladi
+        if (query === "") return;
+
+        fetch(`${ajaxUrl}?q=${encodeURIComponent(query)}`, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.text())
+        .then(html => { container.innerHTML = html; })
+        .catch(err => { console.error('Live search xatosi:', err); });
+    }
+});
+</script>
 {% endblock %}

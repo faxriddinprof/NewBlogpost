@@ -12,38 +12,39 @@
         <div class="card-body">
             <h2 class="card-title">{{ object.title }}</h2>
             <p class="card-text text-muted">Yozilgan sana: {{ object.date|date:"d M Y, H:i" }}</p>
-            <p class="card-text">{{ object.body|linebreaks }}</p>
+            <p class="card-text">{{ object.body|linebreaks | safe }}</p>
             <p class="text-end"><strong>Muallif:</strong> {{ object.author.username }}</p>
 
-            <!-- Like / Dislike + Comment form -->
-            <div class="interaction-box d-flex flex-wrap gap-3 mt-4">
+            <!-- Like / Dislike -->
+            <div class="interaction-box mt-4">
+                <div class="d-flex flex-wrap gap-3 justify-content-start">
 
-                <!-- Like -->
-                <form id="like-form" method="post" action="{% url 'like_article' object.pk %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-outline-success {% if user_liked %}active{% endif %}">
-                        👍 Layk
-                    </button>
-                </form>
+                    <form id="like-form" method="post" action="{% url 'like_article' object.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-success {% if user_liked %}active{% endif %}">
+                            👍 Layk
+                        </button>
+                    </form>
 
-                <!-- Dislike -->
-                <form id="dislike-form" method="post" action="{% url 'dislike_article' object.pk %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-outline-danger {% if user_disliked %}active{% endif %}">
-                        👎 Dizlayk
-                    </button>
-                </form>
+                    <form id="dislike-form" method="post" action="{% url 'dislike_article' object.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger {% if user_disliked %}active{% endif %}">
+                            👎 Dizlayk
+                        </button>
+                    </form>
+                </div>
 
-                <!-- Ko'rsatkichlar -->
-                <div class="d-flex align-items-center gap-3">
+                <!-- Like/Dislike Ko‘rsatkichlar -->
+                <div class="reaction-counts mt-2 d-flex gap-3">
                     <span id="like-count" class="badge bg-success">👍 {{ like_count }}</span>
                     <span id="dislike-count" class="badge bg-danger">👎 {{ dislike_count }}</span>
                 </div>
+            </div>
 
-
-                <!-- Comment form -->
+            <!-- Comment form -->
+            <div class="mt-4">
                 {% if user.is_authenticated %}
-                <form method="post" class="flex-grow-1">
+                <form method="post">
                     {% csrf_token %}
                     {{ form.as_p }}
                     <button type="submit" class="btn btn-primary">✍ Kommentariya yozish</button>
@@ -53,7 +54,7 @@
                 {% endif %}
             </div>
 
-            <!-- Action Buttons -->
+            <!-- Action buttons -->
             <div class="action-buttons d-flex gap-2 mt-4">
                 <a href="{% url next %}" class="btn btn-outline-secondary">← Orqaga</a>
                 {% if request.user == object.author %}
@@ -67,7 +68,6 @@
     <!-- Kommentariyalar -->
     <div class="comments-section mt-5">
         <h4>💬 Kommentariyalar ({{ total_comments }})</h4>
-
         {% if comments %}
         <ul class="list-group mb-3" id="comment-list">
             {% for comment in comments %}
@@ -84,19 +84,16 @@
             <button id="load-more" class="btn btn-outline-info" data-page="2">Ko‘proq ko‘rsatish</button>
         </div>
         {% endif %}
-
         {% else %}
         <p class="text-muted">Hozircha hech qanday kommentariya yo‘q.</p>
         {% endif %}
     </div>
 </div>
 
-
-
-<!-- --------------------Js like dislike----------- -->
+<!-- Like/Dislike JS -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    function handleVote(formId, isLike = true) {
+    function handleVote(formId) {
         const form = document.getElementById(formId);
         form?.addEventListener('submit', function (e) {
             e.preventDefault();
@@ -109,29 +106,24 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(res => res.json())
             .then(data => {
-                document.getElementById('like-count').innerText = data.likes;
-                document.getElementById('dislike-count').innerText = data.dislikes;
+                document.getElementById('like-count').innerText = '👍 ' + data.likes;
+                document.getElementById('dislike-count').innerText = '👎 ' + data.dislikes;
 
-                // Klasslarni faollashtirish yoki olib tashlash
                 const likeBtn = document.querySelector('#like-form button');
                 const dislikeBtn = document.querySelector('#dislike-form button');
 
-                if (likeBtn && dislikeBtn) {
-                    likeBtn.classList.toggle('active', data.user_liked);
-                    dislikeBtn.classList.toggle('active', data.user_disliked);
-                }
+                likeBtn.classList.toggle('active', data.user_liked);
+                dislikeBtn.classList.toggle('active', data.user_disliked);
             });
         });
     }
 
-    handleVote('like-form', true);
-    handleVote('dislike-form', false);
+    handleVote('like-form');
+    handleVote('dislike-form');
 });
 </script>
 
-
-
-<!-- show more js -->
+<!-- Load more comments -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const loadMoreBtn = document.getElementById('load-more');
@@ -162,14 +154,4 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-
-
-
-
-
 {% endblock %}
-
-
-
-
-

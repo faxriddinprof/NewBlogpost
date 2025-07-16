@@ -8,6 +8,7 @@ from .views import (ArticleView,
                     like_article,
                     dislike_article,
                     load_more_comments,
+                    ajax_search,
                 )
 
 
@@ -21,7 +22,8 @@ urlpatterns=[
     path('<int:pk>/like/', like_article, name='like_article'),
     path('<int:pk>/dislike/', dislike_article, name='dislike_article'),
     path('articles/<int:pk>/comments/', load_more_comments, name='load_more_comments'),
-
+    path('search/', ajax_search, name='ajax_search'),
+    
 ]
 
 

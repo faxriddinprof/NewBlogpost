@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    #tashqi app
+    'ckeditor',
+    'ckeditor_uploader',
     'crispy_forms',
     "crispy_bootstrap5",
     'accounts',
@@ -128,6 +131,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
+STATIC_ROOT=str(BASE_DIR.joinpath('staticfiles'))
+STATICFILES_STORAGE='django.contrip.staticfiles.storage.StaticFilesStorage'
 # Custom user model
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
@@ -140,3 +145,24 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 MEDIA_URL='/media/'
 MEDIA_ROOT=str(BASE_DIR.joinpath('media'))
+
+
+
+# ckeeditor 
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Full',
+        'width': '100%',
+        'height': 400,
+        'autoGrow_maxHeight': 800,
+        'removePlugins': 'resize',
+        'extraPlugins': 'autogrow',
+    }
+}
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_RESTRICT_BY_USER=True
+
+CKEDITOR_FILENAME_GENERATOR = 'utils.get_filename'
+
+
