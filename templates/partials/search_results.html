@@ -1,3 +1,6 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/search_results.css' %}">
 {% if object_list %}
 <div class="row">
     {% for article in object_list %}

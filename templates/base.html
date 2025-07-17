@@ -39,7 +39,7 @@
             {% if user.is_authenticated %}
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item">
-                    <a class="nav-link nav-btn" href="{% url 'profil_view' request.user.id %}">👤 Profil</a>
+                    <a class="nav-link nav-btn" href="{% url 'profil_view' %}">👤 Profil</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link nav-btn" href="{% url 'my_posts' %}">📝 Postlarim</a>

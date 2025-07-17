@@ -162,6 +162,12 @@ class Myposts(ListView):
     template_name = 'my_posts.html'
     context_object_name = 'posts'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated:
+            return redirect('login')
+
+        return super().dispatch(request, *args, **kwargs)
+
     def get_queryset(self):
         return Article.objects.filter(author=self.request.user)
 
@@ -228,3 +234,12 @@ def load_more_comments(request, pk):
         ],
         'has_next': page_obj.has_next()
     })
+
+
+
+
+
+# bu 403 errorlar uchun
+
+def custom_permission_denied(request, exception=None):
+    return render(request, '403.html', status=403)

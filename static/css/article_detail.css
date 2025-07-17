@@ -89,3 +89,17 @@
 .action-buttons .btn:hover {
     opacity: 0.9;
 }
+/* bu delete modali uchun */
+
+.modal-content {
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.modal-footer {
+    border-top: 1px solid #e5e5e5;
+}

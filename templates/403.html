@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h1 class="display-4 text-danger">⛔ Ruxsat yo‘q!</h1>
+    <p class="lead">Siz bu maqolani tahrirlash huquqiga ega emassiz.</p>
+    <a href="{% url 'article_list' %}" class="btn btn-primary mt-3">🏠 Bosh sahifaga qaytish</a>
+</div>
+{% endblock %}

@@ -166,3 +166,5 @@ CKEDITOR_RESTRICT_BY_USER=True
 CKEDITOR_FILENAME_GENERATOR = 'utils.get_filename'
 
 
+# this ish for 403 errors
+handler403 = 'yourapp.views.custom_permission_denied'
