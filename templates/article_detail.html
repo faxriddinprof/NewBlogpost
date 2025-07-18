@@ -5,6 +5,12 @@
 <link rel="stylesheet" href="{% static 'css/article_detail.css' %}">
 
 <div class="container mt-5">
+
+    <!-- Orqaga tugmasi card dan oldin -->
+    <div class="back-button mb-3">
+        <a href="{% url next %}" class="btn btn-outline-secondary">← Orqaga</a>
+    </div>
+
     <div class="card shadow">
         {% if object.photo %}
         <img src="{{ object.photo.url }}" class="card-img-top" alt="{{ object.title }}">
@@ -12,7 +18,7 @@
         <div class="card-body">
             <h2 class="card-title">{{ object.title }}</h2>
             <p class="card-text text-muted">Yozilgan sana: {{ object.date|date:"d M Y, H:i" }}</p>
-            <p class="card-text">{{ object.body|linebreaks | safe }}</p>
+            <p class="card-text">{{ object.body|safe }}</p>
             <p class="text-end"><strong>Muallif:</strong> {{ object.author.username }}</p>
 
             <!-- Like / Dislike -->
@@ -34,14 +40,12 @@
                     </form>
                 </div>
 
-                <!-- Like/Dislike Ko‘rsatkichlar -->
                 <div class="reaction-counts mt-2 d-flex gap-3">
                     <span id="like-count" class="badge bg-success">👍 {{ like_count }}</span>
                     <span id="dislike-count" class="badge bg-danger">👎 {{ dislike_count }}</span>
                 </div>
             </div>
 
-            <!-- Comment form -->
             <div class="mt-4">
                 {% if user.is_authenticated %}
                 <form method="post">
@@ -56,7 +60,6 @@
 
             <!-- Action buttons -->
             <div class="action-buttons d-flex gap-2 mt-4">
-                <a href="{% url next %}" class="btn btn-outline-secondary">← Orqaga</a>
                 {% if request.user == object.author %}
                 <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">🗑 O‘chirish</button>
                 <a href="{% url 'article_update' object.pk %}" class="btn btn-primary">✏ Tahrirlash</a>
@@ -89,7 +92,8 @@
         {% endif %}
     </div>
 </div>
-<!-- O‘chirishni tasdiqlovchi modal -->
+
+<!-- Delete modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -111,7 +115,7 @@
   </div>
 </div>
 
-<!-- Like/Dislike JS -->
+<!-- JS skriptlar -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     function handleVote(formId) {
@@ -144,7 +148,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<!-- Load more comments -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const loadMoreBtn = document.getElementById('load-more');
@@ -174,5 +177,4 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
-
 {% endblock %}

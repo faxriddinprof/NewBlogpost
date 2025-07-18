@@ -11,7 +11,7 @@
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
-
+            {{ form.media }}
             <div class="d-flex justify-content-between mt-4">
                 <a href="{% url 'article_detail' object.pk %}" class="btn btn-outline-secondary">
                     ← Orqaga

@@ -8,12 +8,12 @@ from .forms import CustomUserCreationForm, CustomUserUpdateForm
 from .models import CustomUser
 from django.contrib.auth.views import LogoutView as DjangoLogoutView
 
-# 🏠 Bosh sahifaga yo‘naltiruvchi view
+# Bosh sahifaga yo‘naltiruvchi view
 class HomeView(View):
     def get(self, request):
         return redirect('article_list') 
 
-# 📝 Ro‘yxatdan o‘tish
+#  Ro‘yxatdan o‘tish
 class SignupView(CreateView):
     form_class = CustomUserCreationForm
     template_name = 'registration/signup.html'  
@@ -23,7 +23,7 @@ class SignupView(CreateView):
         messages.success(self.request, "✅ Muvaffaqiyatli ro'yxatdan o'tdingiz! Endi tizimga kiring.")
         return super().form_valid(form)
     
- # 👤 Profilni ko‘rish — request.user asosida, pk yo‘q
+ #  Profilni ko‘rish — request.user asosida, pk yo‘q
 class Profilview(LoginRequiredMixin, DetailView):
     model = CustomUser
     template_name = 'profil_view.html'
@@ -34,7 +34,7 @@ class Profilview(LoginRequiredMixin, DetailView):
 
 
 
-# ✏ Profilni tahrirlash
+#  Profilni tahrirlash
 class Profilupdateview(LoginRequiredMixin, UpdateView):
     model = CustomUser
     form_class = CustomUserUpdateForm

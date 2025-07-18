@@ -103,3 +103,38 @@
 .modal-footer {
     border-top: 1px solid #e5e5e5;
 }
+
+
+/* qushimcha */
+.card-text p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+    font-size: 1rem;
+    color: #333;
+}
+
+.card-text a {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.card-text a:hover {
+    text-decoration: none;
+}
+
+
+.back-button {
+    margin-bottom: 1.5rem;
+}
+
+.back-button .btn {
+    font-weight: 500;
+    border-radius: 8px;
+    padding: 6px 16px;
+    transition: background 0.3s ease;
+}
+
+.back-button .btn:hover {
+    background-color: #dee2e6;
+    color: #000;
+}
