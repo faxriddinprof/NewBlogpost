@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Article, Comment, LikeDislike
-from .forms import CommentForm, ArticleForm
+from .forms import CommentForm, ArticleForm, ImageFormSet, ArticleImage
 from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import  JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -115,32 +115,73 @@ class ArticleDetailView(DetailView):
         context = self.get_context_data(form=form)
         return self.render_to_response(context)
 
-
 class CreateArticle(LoginRequiredMixin, CreateView):
     model = Article
     form_class = ArticleForm
     template_name = 'add_article.html'
 
-    def form_valid(self, form):
-        self.object = form.save(False)
-        self.object.author = self.request.user
-        self.object.save()
-        messages.success(self.request, "✅ Maqola muvaffaqiyatli yaratildi.")
-        return HttpResponseRedirect(self.get_success_url())
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['formset'] = ImageFormSet(self.request.POST, self.request.FILES, queryset=ArticleImage.objects.none())
+        else:
+            context['formset'] = ImageFormSet(queryset=ArticleImage.objects.none())
+        return context
 
+    def form_valid(self, form):
+        context = self.get_context_data()
+        image_formset = context['formset']
+        if image_formset.is_valid():
+            self.object = form.save(commit=False)
+            self.object.author = self.request.user
+            self.object.save()
+
+            # Save images
+            for image_form in image_formset:
+                if image_form.cleaned_data:
+                    image = image_form.save(commit=False)
+                    image.article = self.object
+                    image.save()
+
+            messages.success(self.request, "✅ Maqola va rasmlar muvaffaqiyatli saqlandi.")
+            return redirect(self.object.get_absolute_url())
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
 
 class ArticleUpdateview(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Article
-    fields = ['title', 'summary', 'body', 'photo']
+    form_class = ArticleForm
     template_name = 'article_update.html'
-
     def test_func(self):
-        obj = self.get_object()
-        return obj.author == self.request.user
-
+        return self.get_object().author == self.request.user
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['formset'] = ImageFormSet(
+                self.request.POST, self.request.FILES,
+                queryset=ArticleImage.objects.filter(article=self.object)
+            )
+        else:
+            context['formset'] = ImageFormSet(
+                queryset=ArticleImage.objects.filter(article=self.object)
+            )
+        return context
     def form_valid(self, form):
-        messages.success(self.request, "✏️ Maqola yangilandi.")
-        return super().form_valid(form)
+        context = self.get_context_data()
+        formset = context['formset']
+        if formset.is_valid():
+            response = super().form_valid(form)
+            formset.instance = self.object  # assign updated article
+            for form in formset:
+                if form.cleaned_data.get('DELETE'):
+                    form.instance.delete()
+                elif form.cleaned_data.get('image'):
+                    image = form.save(commit=False)
+                    image.article = self.object
+                    image.save()
+            return redirect(self.object.get_absolute_url())
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
 
 
 class ArticleDeleteview(LoginRequiredMixin, UserPassesTestMixin, DeleteView):

@@ -1,34 +1,80 @@
-/* Update sahifasi uchun maxsus stil */
+/* article_update.css */
 
-.card.shadow {
-    border: none;
-    border-radius: 12px;
-    background-color: #ffffff;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+body {
+    background: linear-gradient(to right, #e8f0ff, #fdfcff);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
 }
 
-/* Forma maydonlari */
-form input[type="text"],
-form input[type="file"],
-form textarea,
-form select {
+.article-update-card {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ced4da;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    font-size: 1rem;
-}
-
-/* Submit tugmasi */
-button[type="submit"] {
-    padding: 8px 18px;
-    font-size: 1rem;
+    max-width: 700px;
     border: none;
-    border-radius: 6px;
+    border-radius: 2rem;
+    background-color: #ffffff;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
 }
 
-/* Orqaga tugmasi */
+.article-update-card:hover {
+    transform: scale(1.01);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.15);
+}
+
+h2.text-primary {
+    font-weight: 600;
+    color: #5b4fff !important;
+    font-size: 2rem;
+    letter-spacing: 0.5px;
+}
+
+form .form-control {
+    border-radius: 1rem;
+    border: 1px solid #d0d7e2;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    background-color: #fafbff;
+    transition: all 0.2s ease-in-out;
+}
+
+form .form-control:focus {
+    border-color: #5b4fff;
+    box-shadow: 0 0 0 0.2rem rgba(91, 79, 255, 0.25);
+}
+
+.btn-success {
+    background: #4CAF50;
+    border: none;
+    padding: 0.6rem 1.4rem;
+    font-weight: bold;
+    font-size: 1rem;
+    border-radius: 1rem;
+    transition: 0.3s;
+}
+
+.btn-success:hover {
+    background: #3e8e41;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
 .btn-outline-secondary {
-    border-radius: 6px;
+    border-radius: 1rem;
+    border: 2px solid #ccc;
+    padding: 0.6rem 1.4rem;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #f0f0f0;
+    border-color: #999;
+}
+
+@media (max-width: 768px) {
+    .article-update-card {
+        padding: 2rem 1.5rem;
+    }
+
+    h2.text-primary {
+        font-size: 1.5rem;
+    }
 }

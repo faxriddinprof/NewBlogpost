@@ -138,3 +138,24 @@
     background-color: #dee2e6;
     color: #000;
 }
+
+
+
+/* bular yangi */
+.card-img-top {
+    max-height: 400px;
+    object-fit: cover;
+    border-bottom: 1px solid #dee2e6;
+}
+
+
+.carousel-item img {
+    max-height: 450px;
+    object-fit: cover;
+    width: 100%;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.slider {
+  animation: slide 3s infinite;
+}

@@ -12,7 +12,6 @@ class Article(models.Model):
     title=models.CharField(max_length=150)
     summary=models.CharField(max_length=250, blank=True)
     body=RichTextField()
-    photo=models.ImageField(upload_to='images/',blank=True)
     date=models.DateTimeField(auto_now_add=True)
     author=models.ForeignKey(
         User,
@@ -25,7 +24,21 @@ class Article(models.Model):
     
     def get_absolute_url(self):
         return reverse('article_detail', args=[str(self.id)])
-    
+
+
+# for images  
+class ArticleImage(models.Model):
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='article_images/')
+
+    def __str__(self):
+        return f"Image for {self.article.title}"
+
+
+
+
+
+
 
 class Comment(models.Model):
     post = models.ForeignKey('Article', on_delete=models.CASCADE, related_name='comments')

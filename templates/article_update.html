@@ -1,17 +1,45 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
 
+{% block title %}Postni tahrirlash{% endblock %}
+
+{% block extrahead %}
+    {{ form.media }}
+    <link rel="stylesheet" href="{% static 'css/article_update.css' %}">
+{% endblock %}
+
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/article_update.css' %}">
+<div class="container my-5 d-flex justify-content-center">
+    <div class="card shadow-lg p-4 article-update-card w-100" style="max-width: 900px;">
+        <h2 class="mb-4 text-center text-primary">✏ Postni Tahrirlash</h2>
 
-<div class="container mt-5">
-    <div class="card shadow p-4">
-        <h2 class="mb-4 text-center">✏ Postni Tahrirlash</h2>
-
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" novalidate>
             {% csrf_token %}
-            {{ form.as_p }}
-            {{ form.media }}
+
+            <!-- Asosiy forma -->
+            {{ form|crispy }}
+
+            <!-- Rasmlar uchun formset -->
+            <h5 class="mt-4 text-secondary">📸 Rasmlar:</h5>
+            <div class="row">
+                {{ formset.management_form }}
+                {% for form in formset %}
+                    <div class="col-md-6 mb-3">
+                        <div class="border rounded p-2">
+                            {{ form.image.label_tag }} {{ form.image }}
+                            {% if form.instance.image %}
+                                <img src="{{ form.instance.image.url }}" alt="rasm" class="img-fluid mt-2" style="max-height: 150px;">
+                            {% endif %}
+                            <div class="form-check mt-2">
+                                {{ form.DELETE }} {{ form.DELETE.label_tag }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Tugmalar -->
             <div class="d-flex justify-content-between mt-4">
                 <a href="{% url 'article_detail' object.pk %}" class="btn btn-outline-secondary">
                     ← Orqaga

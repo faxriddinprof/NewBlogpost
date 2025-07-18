@@ -6,18 +6,40 @@
 
 {% block extrahead %}
     {{ form.media }}
+    <link rel="stylesheet" href="{% static 'css/add_article.css' %}">
 {% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/add_article.css' %}">
-
-<div class="container-fluid my-5 px-4">
-    <div class="card shadow p-5">
+<div class="container my-5 d-flex justify-content-center">
+    <div class="card shadow-lg p-4 add-article-card" style="width: 100%; max-width: 800px;">
         <h2 class="mb-4 text-center text-primary">✍️ Yangi maqola qo‘shish</h2>
-        <form method="post" enctype="multipart/form-data">
+
+        <form method="post" enctype="multipart/form-data" novalidate>
             {% csrf_token %}
-            {{ form|crispy }}
-            <button type="submit" class="btn btn-success w-100 mt-3">💾 Saqlash</button>
+            {{ form.non_field_errors }}
+
+            <div class="mb-3">
+                {{ form.title|as_crispy_field }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.body|as_crispy_field }}
+            </div>
+
+            <hr>
+            <h5>📸 Rasmlar yuklash</h5>
+
+            {{ formset.management_form }}
+            {% for image_form in formset %}
+                <div class="mb-3">
+                    {{ image_form.image.errors }}
+                    {{ image_form.image }}
+                    <!-- ❌ Rasm preview olib tashlandi -->
+                </div>
+            {% endfor %}
+            <small class="form-text text-muted">Bir nechta rasm yuklash uchun har bir rasm alohida form orqali kiritiladi.</small>
+
+            <button type="submit" class="btn btn-success mt-4 w-100">💾 Saqlash</button>
         </form>
     </div>
 </div>
