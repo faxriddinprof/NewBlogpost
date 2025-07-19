@@ -12,9 +12,12 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
+    
+    
+
     {% block extrahead %}{{ block.super }}{% endblock %}
 </head>
-<body>
+<body class="bg-dark-blue">
 
 <!-- ==================== NAVBAR ==================== -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
@@ -33,6 +36,7 @@
             <!-- Qidiruv formasi NAVBAR ichida -->
             <form method="get" action="{% url 'article_list' %}" class="d-flex align-items-center me-3 position-relative" id="navbar-search-form">
                 <input type="text" name="q" id="search-input" class="form-control form-control-sm" placeholder="🔍 Qidirish..." value="{{ request.GET.q }}">
+
                 <span id="clear-search">&times;</span>
             </form>
 
@@ -79,15 +83,22 @@
 {% endif %}
 
 <!-- CONTENT -->
-<div class="container mt-4">
-    {% block content %}{% endblock %}
+ <div class="animated-bg"></div>
+<!-- base.html body ichida -->
+<div id="particles-js" style="position: fixed; width: 100%; height: 100%; z-index: -1;"></div>
+
+<div class="content-wrapper container mt-4">
+    {% block content %}
+    {% endblock %}
 </div>
 
 <!-- FOOTER -->
 <footer class="text-center text-muted mt-5 mb-3">
-    <small>&copy; {{ now.year }} Faxriddin Blog</small>
+    <small>&copy; {% now "Y" %} Faxriddin Blog</small>
 </footer>
-
+{% comment %} bu js {% endcomment %}
+    <script src="{% static 'js/particles.min.js' %}"></script>
+    <script src="{% static 'js/particles-config.js' %}"></script>
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -106,5 +117,13 @@
 <!-- Qidiruv AJAX – JS fayl orqali -->
 <script src="{% static 'js/search.js' %}"></script>
 
+
+
+
 </body>
 </html>
+
+
+
+
+

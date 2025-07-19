@@ -35,28 +35,28 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    color: black;
 }
 
 /* Sarlavha */
 .card-title {
     font-size: 1.2rem;
     font-weight: bold;
-    color: #333;
+    color: #060000f7;
     margin-bottom: 8px;
 }
 
 /* Matn */
 .card-text {
     font-size: 0.95rem;
-    color: #555;
-    margin-bottom: 10px;
+    color: black
 }
 
 /* Sana va muallif qismi */
 .author-date {
     font-size: 0.85rem;
     color: #888;
-}
+}   
 
 /* Tugma */
 .btn {
@@ -78,6 +78,7 @@
 
     .card-title {
         font-size: 1rem;
+        color: black;`
     }
 
     .card-text {
@@ -92,3 +93,4 @@
     border-top-left-radius: 0.5rem;
     border-top-right-radius: 0.5rem;
 }
+

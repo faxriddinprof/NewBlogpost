@@ -15,14 +15,14 @@
 .card-title {
     font-size: 2rem;
     font-weight: 600;
-    color: #333;
+    color: black;
     margin-bottom: 0.75rem;
 }
 
 .card-text {
     font-size: 1.05rem;
     line-height: 1.7;
-    color: #444;
+    color: black
 }
 
 .text-muted {
@@ -158,4 +158,16 @@
 
 .slider {
   animation: slide 3s infinite;
+}
+
+.modal {
+    z-index: 1055 !important;
+}
+
+.modal-backdrop.show {
+    z-index: -1 !important;
+    opacity: 0 !important; /* yoki 0.1 — fonni ozgina qoraytirish uchun */
+}
+.modal {
+    pointer-events: auto;
 }

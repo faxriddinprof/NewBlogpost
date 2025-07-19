@@ -9,7 +9,7 @@
 
     <!-- Orqaga tugmasi card dan oldin -->
     <div class="back-button mb-3">
-        <a href="{% url next %}" class="btn btn-outline-secondary">← Orqaga</a>
+        <a href="{% url next %}" style="background:orange;" class="btn btn-outline-secondary">← Orqaga</a>
     </div>
 
     <div class="card shadow">
@@ -115,7 +115,7 @@
 </div>
 
 <!-- Delete modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteModal" tabindex="-1"  aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <form method="post" action="{% url 'article_delete' object.pk %}">
