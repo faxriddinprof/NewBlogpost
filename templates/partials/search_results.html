@@ -1,28 +1,37 @@
 {% load static %}
 
-<link rel="stylesheet" href="{% static 'css/search_results.css' %}">
-{% if object_list %}
-<div class="row">
-    {% for article in object_list %}
-    <div class="col-md-4 mb-4">
-        <div class="card shadow-sm h-100">
-            {% if article.photo %}
-            <img src="{{ article.photo.url }}" class="card-img-top article-img" alt="{{ article.title }}">
-            {% endif %}
-            <div class="card-body">
-                <h5 class="card-title">{{ article.title }}</h5>
-                <p class="card-text">{{ article.summary|truncatechars:100 }}</p>
-                <div class="text-muted small mb-2">
-                    ✍ {{ article.author.username }} — 📅 {{ article.date|date:"d M, Y" }}
+<link rel="stylesheet" href="{% static 'css/article_list.css' %}">
+
+<div class="container mt-4">
+    <h2 class="mb-4">🔍 Qidiruv natijalari</h2>
+    {% if object_list %}
+    <div class="row" id="article-container">
+        {% for article in object_list %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm article-card">
+                {% with article.images.first as first_image %}
+                    {% if first_image %}
+                        <img src="{{ first_image.image.url }}" class="card-img-top article-img" alt="{{ article.title }}">
+                    {% endif %}
+                {% endwith %}
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title">{{ article.title }}</h5>
+                        <p class="card-text">{{ article.summary|truncatewords:20 }}</p>
+                    </div>
+                    <div class="mt-3">
+                        <p class="author-date text-muted mb-1">🖋 {{ article.author.username }}</p>
+                        <p class="author-date text-muted">📅 {{ article.date|date:"d M Y, H:i" }}</p>
+                        <a href="{% url 'article_detail' article.pk %}" class="btn btn-outline-primary w-100 mt-2">Batafsil</a>
+                    </div>
                 </div>
-                <a href="{% url 'article_detail' article.pk %}" class="btn btn-outline-primary btn-sm">Batafsil</a>
             </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
+    {% else %}
+    <div class="text-center mt-5">
+        <p class="text-danger fw-bold fs-5">Hech qanday maqola topilmadi.</p>
+    </div>
+    {% endif %}
 </div>
-{% else %}
-<div class="text-center mt-4">
-    <p class="text-danger fw-bold fs-5">🔍 Hech qanday maqola topilmadi.</p>
-</div>
-{% endif %}

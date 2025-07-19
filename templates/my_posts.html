@@ -5,16 +5,18 @@
 <link rel="stylesheet" href="{% static 'css/article_list.css' %}">
 
 <div class="container mt-5">
-    <h2 class="mb-4">📝 Mening Postlarim</h2>
+    <h2 class="mb-4 text-center">📝 Mening Postlarim</h2>
 
     {% if posts %}
-    <div class="row" id="article-container">
+    <div class="row row-cols-1 row-cols-md-2 g-4" id="article-container">
         {% for article in posts %}
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                {% if article.photo %}
-                <img src="{{ article.photo.url }}" class="card-img-top article-img" alt="{{ article.title }}">
-                {% endif %}
+        <div class="col">
+            <div class="card h-100 shadow-sm article-card">
+                {% with article.images.first as first_image %}
+                    {% if first_image %}
+                        <img src="{{ first_image.image.url }}" class="card-img-top article-img" alt="{{ article.title }}">
+                    {% endif %}
+                {% endwith %}
                 <div class="card-body d-flex flex-column justify-content-between">
                     <div>
                         <h5 class="card-title">{{ article.title }}</h5>
@@ -30,7 +32,9 @@
         {% endfor %}
     </div>
     {% else %}
-        <p>Siz hali post yozmagansiz.</p>
+        <div class="alert alert-warning text-center">
+            Siz hali hech qanday post yozmagansiz.
+        </div>
     {% endif %}
 </div>
 {% endblock %}
